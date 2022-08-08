@@ -2,10 +2,10 @@ package com.example.oraclecertification.chapter4;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class StringsSandBox {
+
     @Test
     public void textBlock() {
         String name = """
@@ -24,7 +24,7 @@ public class StringsSandBox {
     public void getSingleChar() {
         var name = "animals";
         var expectedCharAtPosition2 = 'i';
-        assertTrue(name.charAt(2) == expectedCharAtPosition2);
+        assertEquals(name.charAt(2), expectedCharAtPosition2);
         Exception exception = assertThrows(StringIndexOutOfBoundsException.class, () -> {
             name.charAt(7);
         });
@@ -78,4 +78,53 @@ public class StringsSandBox {
         System.out.println(String.format("Hello %s, order %d is ready", name, orderId));
         System.out.println("Hello %s, order %d is ready".formatted(name, orderId));
     }
+
+    @Test
+    public void formatString2() {
+        var number = String.format("%.1f", 90.25);
+        System.out.println(number);
+    }
+
+    @Test
+    public void piNumber() {
+        var pi = 3.14159265359;
+        System.out.format("%f\n", pi);
+        System.out.format("%12.8f\n", pi);
+        System.out.format("%012f\n", pi);
+        System.out.format("%12.2f\n", pi);
+        System.out.format("%.3f\n", pi);
+    }
+
+    @Test
+    public void methodChaining() {
+        var start = "AniMaL   ";
+        String trimmed = start.trim();
+        System.out.println("Trimmed: [%s]".formatted(trimmed));
+        var lowercase = trimmed.toLowerCase();
+        System.out.println("In lowercase: [%s]".formatted(lowercase));
+        var result = lowercase.replace('a', 'A');
+        System.out.println("Result is: " + result);
+        var result2 = start.trim().toLowerCase().replace('a', 'A');
+        System.out.println("Result2 is: " + result2);
+    }
+
+    @Test
+    public void sand() {
+        String s1 = """
+                purr""";
+        System.out.println(s1 += "two");
+        System.out.println(s1.length());
+    }
+
+    @Test
+    public void testAutoboxing() {
+        int numberAsInt = 9;
+        Integer numberAsInteger = 10;
+        long l = 9;
+        //numberAsInt = numberAsInteger;
+        //System.out.println(numberAsInt);
+        numberAsInteger = numberAsInt;
+        System.out.println(numberAsInteger);
+    }
+
 }
