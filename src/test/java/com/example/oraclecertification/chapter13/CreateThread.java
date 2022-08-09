@@ -2,8 +2,7 @@ package com.example.oraclecertification.chapter13;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class CreateThread {
     @Test
@@ -70,6 +69,39 @@ public class CreateThread {
         } finally {
             service.shutdown();
         }
-        System.out.println("end");
+        service.awaitTermination(1, TimeUnit.MINUTES);
+        if (service.isTerminated()) System.out.println("Finished");
+        else System.out.println("At least one task is still running");
+    }
+
+    @Test
+    public void test5() throws InterruptedException {
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Future<?> future = service.submit(() -> System.out.println("Hello"));
+        Thread.sleep(500);
+        System.out.println(future.cancel(true));
+        System.out.println(future.isDone());
+    }
+
+    @Test
+    public void test6() throws Exception {
+        var service = Executors.newSingleThreadExecutor();
+        try {
+            Future<Integer> future = service.submit(() -> 30 + 11);
+            System.out.println(future.get());
+        } finally {
+            service.shutdown();
+        }
+    }
+
+    @Test
+    public void test7() throws Exception {
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+        Runnable task1 = () -> System.out.println("Hello Zoo");
+        Callable<String> task2 = () -> "Monkey";
+        ScheduledFuture<?> r1 = service.scheduleAtFixedRate(task1,10,1,TimeUnit.SECONDS);
+        ScheduledFuture<?> r2 = service.schedule(task2, 20, TimeUnit.SECONDS);
+        Thread.sleep(30000);
+        System.out.println(r2.get());
     }
 }
