@@ -3,6 +3,8 @@ package com.example.oraclecertification.chapter13;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class CreateThread {
     @Test
@@ -99,9 +101,23 @@ public class CreateThread {
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
         Runnable task1 = () -> System.out.println("Hello Zoo");
         Callable<String> task2 = () -> "Monkey";
-        ScheduledFuture<?> r1 = service.scheduleAtFixedRate(task1,10,1,TimeUnit.SECONDS);
+        ScheduledFuture<?> r1 = service.scheduleAtFixedRate(task1, 10, 1, TimeUnit.SECONDS);
         ScheduledFuture<?> r2 = service.schedule(task2, 20, TimeUnit.SECONDS);
         Thread.sleep(30000);
         System.out.println(r2.get());
+    }
+
+    @Test
+    public void test8() {
+        Lock lock = new ReentrantLock();
+        if (lock.tryLock()) {
+            try {
+                lock.lock();
+                System.out.println("Lock obtained, entering protected code");
+            } finally {
+                lock.unlock();
+            }
+        }
+        new Thread(()-> System.out.println(lock.tryLock())).start();
     }
 }
